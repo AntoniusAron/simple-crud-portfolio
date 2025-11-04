@@ -57,3 +57,9 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+Note:
+I am a full-stack Java developer who works with GXT (FrontEnd) and Spring Boot (BackEnd) and want to start exploring Angular
+I created this project as a goal to create a portfolio of results from self-learning Angular programming
+This project uses an API created and shared by a more senior Angular programmer who I use as a role model to learn from
+Please use the API wisely
