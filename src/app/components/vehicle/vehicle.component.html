@@ -1,0 +1,171 @@
+<!-- app.component.html -->
+<br>
+<div>
+  <button (click)="onCreateNew()" class="btn btn-warning">Create New Data</button>
+</div>
+
+<br>
+<div class="col-12">
+  <div class="card">
+    <div class="card-header bg-warning">
+      <h5>Vehicle List</h5>
+    </div>
+
+    <div class="card-body">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <td style="font-weight: bold; background-color: darkseagreen;">Sr No</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Brand</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Model</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Req No</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Daily Rate</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Actions</td>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of carList; track $index) {
+            <tr>
+              <td>{{$index+1}}</td>
+              <td>{{item.brand}}</td>
+              <td>{{item.model}}</td>
+              <td>{{item.regNo}}</td>
+              <td>{{item.dailyRate}}</td>
+              <td>
+                <button class="btn btn-success" (click)="onButtonEdit(item)">Edit</button>
+                <button class="btn btn-danger" (click)="onButtonDelete(item.carId)">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="side-panel" [class.open]="isPanelOpen">
+  <div class="header-container">
+    <button class="close-btn" (click)="closePanel()">✕</button>
+      <h5 class="title bg-warning p-2">Vehicle Form</h5>
+  </div>
+  
+  <div>
+    <form class="form-grid" [formGroup]="carForm">
+      <div class="form-group">
+        <label for="regNo">Reg No</label>
+        <input type="text" id="regNo" formControlName="regNo" class="form-control" placeholder="Enter reg No">
+          @if(regNo?.invalid && (actionMode == "update" || regNo?.touched)){
+            <div class="text-danger">
+              @if(regNo?.errors?.['required']){
+                <span>This is required</span>
+              }
+              @else if(regNo?.errors?.['minlength']) {
+                <span>Min 3 characters</span>
+              }
+            </div>
+          }
+      </div>
+      <div class="form-group">
+        <label for="brand">Brand</label>
+        <input type="text" id="brand" formControlName="brand" class="form-control" placeholder="Enter brand name">
+          @if(brand?.invalid && (actionMode == "update" || brand?.touched)){
+            <div class="text-danger">
+              @if(brand?.errors?.['required']){
+                <span>This is required</span>
+              }
+              @else if(brand?.errors?.['minlength']) {
+                <span>Min 3 characters</span>
+              }
+            </div>
+          }
+      </div>
+      <div class="form-group">
+        <label for="model">Model</label>
+        <input type="text" id="model" formControlName="model" class="form-control" placeholder="Enter model name">
+          @if(model?.invalid && (actionMode == "update" || model?.touched)){
+            <div class="text-danger">
+              @if(model?.errors?.['required']){
+                <span>This is required</span>
+              }
+              @else if(model?.errors?.['minlength']) {
+                <span>Min 3 characters</span>
+              }
+            </div>
+          }
+      </div>
+      <div class="form-group">
+        <label for="year">Year</label>
+        <input type="text" id="year" formControlName="year" class="form-control" placeholder="Enter year">
+          @if(year?.invalid && (actionMode == "update" || year?.touched)){
+            <div class="text-danger">
+              @if(year?.errors?.['required']){
+                <span>This is required</span>
+              }            
+              @else if(year?.errors?.['notANumber']) {
+                <span>Must be a number</span>
+              }
+              @else if(year?.errors?.['notInteger']) {
+                <span>No decimal</span>
+              }
+              @else if(year?.errors?.['notPositive']) {
+                <span>Can't negative</span>
+              }
+              @else if(year?.errors?.['minValue']) {
+                <span>Min value 1900</span>
+              }
+              @else if(year?.errors?.['maxValue']) {
+                <span>Can't higher than current year</span>
+              }
+            </div>
+          }
+      </div>
+      <div class="form-group">
+        <label for="dailyRate">Daily Rate</label>
+        <input type="text" id="dailyRate" formControlName="dailyRate" class="form-control" placeholder="Enter daily rate">
+          @if(dailyRate?.invalid && (actionMode == "update" || dailyRate?.touched)){
+            <div class="text-danger">
+              @if(dailyRate?.errors?.['required']){
+                <span>This is required</span>
+              }
+              @else if(dailyRate?.errors?.['minlength']) {
+                <span>Min 4 characters</span>
+              }
+              @else if(dailyRate?.errors?.['maxlength']) {
+                <span>Min 4 characters</span>
+              }
+              @else if(dailyRate?.errors?.['notANumber']) {
+                <span>Must be a number</span>
+              }
+              @else if(dailyRate?.errors?.['notInteger']) {
+                <span>No decimal</span>
+              }
+              @else if(dailyRate?.errors?.['notPositive']) {
+                <span>Must higher than 0</span>
+              }            
+            </div>
+          }
+      </div>
+      <div class="form-group">
+        <label for="carImage">Car Image Url</label>
+        <input type="text" id="carImage" formControlName="carImage" class="form-control" placeholder="Enter car image url">
+      </div>
+
+      <div class="form-group full-width">
+        <div class="form-button">
+          @if(actionMode == "new"){
+            <button type="submit" class="btn btn-primary" [disabled]="carForm.invalid" (click)="onSave('new')">Create</button>
+          } @else {
+            <button type="submit" class="btn btn-primary" [disabled]="carForm.invalid" (click)="onSave('update')">Update</button>
+          }
+        </div>
+      </div>    
+    </form> 
+  </div>
+   
+</div>
+
+@if (isPanelOpen) {
+  <div class="overlay" (click)="closePanel()"></div>
+}
+

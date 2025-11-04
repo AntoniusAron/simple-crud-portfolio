@@ -1,0 +1,132 @@
+<br>
+<div>
+  <button (click)="onCreateNew()" class="btn btn-warning">Create New Data</button>
+</div>
+<br>
+<div class="col-12">
+  <div class="card">
+    <div class="card-header bg-warning">
+      <h5>Customer List</h5>
+    </div>
+
+    <div class="card-body">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <td style="font-weight: bold; background-color: darkseagreen;">No</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Customer Name</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Customer City</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Mobile No</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Email</td>
+            <td style="font-weight: bold; background-color: darkseagreen;">Actions</td>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of customerList; track $index) {
+            <tr>
+              <td>{{$index+1}}</td>
+              <td>{{item.customerName}}</td>
+              <td>{{item.customerCity}}</td>
+              <td>{{item.mobileNo}}</td>
+              <td>{{item.email}}</td>
+              <td>
+                <button class="btn btn-success" (click)="onButtonEdit(item)">Edit</button>
+                <button class="btn btn-danger" (click)="onButtonDelete(item.customerId)">Delete</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="side-panel" [class.open]="isPanelOpen">
+  <div class="header-container">
+    <button class="close-btn" (click)="closePanel()">✕</button>
+      <h5 class="title bg-warning p-2">Customer Form</h5>
+  </div>
+  
+  <div>
+    <form class="form-grid" [formGroup]="customerForm">
+      <div class="form-group">
+        <label for="customerName">Name</label>
+        <input type="text" id="customerName" formControlName="customerName" class="form-control" placeholder="Enter reg No">
+          @if(customerName?.invalid && (actionMode == "update" || customerName?.touched)){
+            <div class="text-danger">
+              @if(customerName?.errors?.['required']){
+                <span>This is required</span>
+              }
+              @else if(customerName?.errors?.['minlength']) {
+                <span>Min 3 characters</span>
+              }
+            </div>
+          }
+      </div>
+      <div class="form-group">
+        <label for="customerCity">City</label>
+        <input type="text" id="customerCity" formControlName="customerCity" class="form-control" placeholder="Enter customerCity name">
+          @if(customerCity?.invalid && (actionMode == "update" || customerCity?.touched)){
+            <div class="text-danger">
+              @if(customerCity?.errors?.['required']){
+                <span>This is required</span>
+              }
+              @else if(customerCity?.errors?.['minlength']) {
+                <span>Min 3 characters</span>
+              }
+            </div>
+          }
+      </div>
+      <div class="form-group">
+        <label for="mobileNo">Mobile No</label>
+        <input type="text" id="mobileNo" formControlName="mobileNo" class="form-control" placeholder="Enter mobileNo name">
+          @if(mobileNo?.invalid && (actionMode == "update" || mobileNo?.touched)){
+            <div class="text-danger">
+              @if(mobileNo?.errors?.['required']){
+                <span>This is required</span>
+              }
+              @else if(mobileNo?.errors?.['minlength']) {
+                <span>Min 10 characters</span>
+              }
+              @else if(mobileNo?.errors?.['notANumber'] || mobileNo?.errors?.['notInteger'] || mobileNo?.errors?.['notPositive']) {
+                <span>Invalid Phone number</span>
+              }
+            </div>
+          }
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" formControlName="email" class="form-control" placeholder="Enter email">
+          @if(email?.invalid && (actionMode == "update" || email?.touched)){
+            <div class="text-danger">
+              @if(email?.errors?.['required']){
+                <span>This is required</span>
+              }
+              @else if(email?.errors?.['minlength']) {
+                <span>Min 6 characters</span>
+              }
+              @else if(email?.errors?.['email']) {
+                <span>Invalid email</span>
+              }
+            </div>
+          }
+      </div>
+
+      <div class="form-group full-width">
+        <div class="form-button">
+          @if(actionMode == "new"){
+            <button type="submit" class="btn btn-primary" [disabled]="customerForm.invalid" (click)="onSave('new')">Create</button>
+          } @else {
+            <button type="submit" class="btn btn-primary" [disabled]="customerForm.invalid" (click)="onSave('update')">Update</button>
+          }
+        </div>
+      </div>    
+    </form> 
+  </div>
+   
+</div>
+
+@if (isPanelOpen) {
+  <div class="overlay" (click)="closePanel()"></div>
+}
