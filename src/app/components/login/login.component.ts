@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { LoginService } from "../../services/login.service";
+import { AuthService } from "../../services/auth.service";
 
 @Component({
   selector: "app-login",
@@ -16,7 +17,9 @@ export class LoginComponent {
 
   router = inject(Router);
 
-  constructor(private toastr: ToastrService, private loginServ: LoginService) {}
+  constructor(private toastr: ToastrService, 
+                private loginServ: LoginService,
+                private authServ: AuthService) {}
 
   onLogin() {
     if (this.userName.invalid || this.password.invalid) {
@@ -31,9 +34,8 @@ export class LoginComponent {
 
     this.loginServ.loginUser(apiLoginObj).subscribe(
       (result: any) => {
-        localStorage.setItem("angular19User", result.data.userId);
-        localStorage.setItem("angular19Token", result.data.token);
-        localStorage.setItem("angular19TokenData", JSON.stringify(result.data));
+
+        this.authServ.setToken(result.data);
         this.router.navigateByUrl("vehicle");
       },
       (error) => {
