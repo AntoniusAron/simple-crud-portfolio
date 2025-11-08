@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: "app-vehicle",
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, AsyncPipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: "./vehicle.component.html",
   styleUrl: "./vehicle.component.css",
 })
